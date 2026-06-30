@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DocLens - Salvar Campo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --sidebar-bg: #121212;
+            --card-bg: #1a1a1a;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #ffffff;
+            --primary-light: #e5e5e5;
+            --accent: #a3a3a3;
+            --text-main: #ffffff;
+            --text-muted: #a3a3a3;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 2.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            margin-bottom: 3.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #ffffff;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #000000;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #fff, #9ca3af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.85rem 1.25rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .menu-item a:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .menu-item.active a {
+            color: #000000;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+        }
+
+        /* Workspace */
+        .workspace {
+            margin-left: var(--sidebar-width);
+            padding: 3rem 4rem;
+            flex-grow: 1;
+            max-width: calc(100% - var(--sidebar-width));
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 2.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: -0.03em;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 0.5rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.75rem 0;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-group input {
+            width: 1.2rem;
+            height: 1.2rem;
+            accent-color: #ffffff;
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.7rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #000000;
+            box-shadow: 0 4px 14px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: #e5e5e5;
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Sidebar -->
+    <aside class="sidebar">
+        <div class="logo-container">
+            <div class="logo-icon">D</div>
+            <span class="logo-text">DocLens</span>
+        </div>
+        <nav>
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <a href="/templates">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        Templates
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a href="/fields">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                        Campos
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/extraction">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Extração
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Workspace -->
+    <main class="workspace">
+        <div class="card">
+            <h2 class="page-title" th:text="${fieldId == null} ? 'Novo Campo' : 'Editar Campo'">Salvar Campo</h2>
+            <form th:action="${fieldId == null} ? '/fields' : '/fields/edit/' + ${fieldId}" 
+                  th:object="${field}" method="post">
+                
+                <div class="form-group">
+                    <label for="code">Código Único (Code)</label>
+                    <input type="text" id="code" th:field="*{code}" placeholder="Ex: numero_documento" required th:readonly="${fieldId != null}" />
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Nome Exibido</label>
+                    <input type="text" id="name" th:field="*{name}" placeholder="Ex: Número do Documento" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Descrição</label>
+                    <textarea id="description" th:field="*{description}" rows="3" placeholder="Instruções para localizar este campo..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="type">Tipo do Campo</label>
+                    <select id="type" th:field="*{type}">
+                        <option th:each="tp : ${fieldTypes}" th:value="${tp}" th:text="${tp}">STRING</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="templateId">Template Associado</label>
+                    <select id="templateId" th:field="*{templateId}">
+                        <option value="">Nenhum</option>
+                        <option th:each="t : ${templates}" th:value="${t.id}" th:text="${t.name} + ' (#' + ${t.tag} + ')'"></option>
+                    </select>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="required" th:field="*{required}" />
+                    <label for="required">Este campo é obrigatório para extração</label>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Salvar</button>
+                    <a href="/fields" class="btn btn-secondary" style="flex: 1;">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
