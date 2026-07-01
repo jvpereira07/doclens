@@ -55,6 +55,7 @@ public class TemplateViewController {
                             .required(f.getRequired())
                             .type(f.getType())
                             .templateId(template.getId())
+                            .parentFieldCode(f.getParentFieldCode())
                             .build())
                     .collect(Collectors.toList());
         }

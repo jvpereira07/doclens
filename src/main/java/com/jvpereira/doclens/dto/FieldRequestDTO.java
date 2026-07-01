@@ -19,4 +19,8 @@ public class FieldRequestDTO {
     private Boolean required;
     private FieldType type;
     private UUID templateId;
+    private UUID parentFieldId;
+    private String parentFieldCode;
+    @Builder.Default
+    private java.util.List<FieldRequestDTO> subFields = new java.util.ArrayList<>();
 }

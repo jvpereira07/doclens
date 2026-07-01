@@ -15,7 +15,6 @@
             --accent: #a3a3a3;
             --text-main: #ffffff;
             --text-muted: #a3a3a3;
-            --danger: #444444;
             --sidebar-width: 260px;
         }
 
@@ -38,101 +37,84 @@
             width: var(--sidebar-width);
             background-color: var(--sidebar-bg);
             border-right: 1px solid var(--border-color);
-            padding: 2.5rem 1.5rem;
             display: flex;
             flex-direction: column;
+            padding: 2rem 1.5rem;
             position: fixed;
-            top: 0;
-            bottom: 0;
+            height: 100vh;
             left: 0;
+            top: 0;
             z-index: 100;
         }
 
-        .logo-container {
-            margin-bottom: 3.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: #ffffff;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #000000;
-            font-size: 1.2rem;
-        }
-
-        .logo-text {
+        .brand {
             font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: -0.04em;
-            background: linear-gradient(135deg, #fff, #9ca3af);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.05em;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
         }
 
-        .menu-list {
+        .brand span {
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .nav-links {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
-        .menu-item a {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.85rem 1.25rem;
+        .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
+            padding: 0.8rem 1rem;
             border-radius: 0.5rem;
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
         }
 
-        .menu-item a:hover {
-            color: var(--text-main);
-            background: rgba(255, 255, 255, 0.03);
+        .nav-links a:hover, .nav-links li.active a {
+            color: var(--primary);
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
-        .menu-item.active a {
-            color: #000000;
-            background: #ffffff;
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
-            font-weight: 600;
-        }
-
-        /* Workspace */
-        .workspace {
+        /* Main Content */
+        .main-content {
             margin-left: var(--sidebar-width);
-            padding: 3rem 4rem;
             flex-grow: 1;
-            max-width: calc(100% - var(--sidebar-width));
+            padding: 3rem;
+            max-width: 1400px;
         }
 
+        header {
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        /* Card Container */
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 0.75rem;
             padding: 2.5rem;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            max-width: 800px;
         }
 
-        .page-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            letter-spacing: -0.03em;
-        }
-
+        /* Form Controls */
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -143,65 +125,46 @@
             gap: 1.5rem;
         }
 
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 500;
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
 
-        input[type="text"], textarea, select {
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        input[type="text"], select, textarea {
             width: 100%;
             padding: 0.8rem 1rem;
-            border-radius: 0.5rem;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
             color: var(--text-main);
             font-family: inherit;
             font-size: 0.95rem;
             transition: all 0.2s;
         }
 
-        input[type="text"]:focus, textarea:focus, select:focus {
+        select option {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        input[type="text"]:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.06);
         }
 
-        /* Nested Fields Section */
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-top: 2.5rem;
-            margin-bottom: 1.25rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .fields-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1.5rem;
-        }
-
-        .fields-table th {
-            padding: 0.75rem;
-            color: var(--text-muted);
-            text-align: left;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .fields-table td {
-            padding: 0.5rem;
-            vertical-align: middle;
-        }
-
+        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -214,12 +177,7 @@
             cursor: pointer;
             border: none;
             font-size: 0.9rem;
-        }
-
-        .btn-sm {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.8rem;
-            border-radius: 0.35rem;
+            gap: 0.5rem;
         }
 
         .btn-primary {
@@ -231,7 +189,6 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             background: #e5e5e5;
-            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
         }
 
         .btn-secondary {
@@ -269,45 +226,118 @@
         .btn-group {
             display: flex;
             gap: 1rem;
-            margin-top: 2rem;
+            margin-top: 2.5rem;
+        }
+
+        /* Tree Styles */
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+        }
+
+        .section-title span {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .tree-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tree-node {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .node-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .node-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .node-input-group.checkbox-item {
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: unset;
+        }
+
+        .node-input-group.checkbox-item label {
+            margin-bottom: 0;
+            cursor: pointer;
+            text-transform: none;
+            font-size: 0.9rem;
+        }
+
+        .node-input-group.checkbox-item input {
+            width: 1.1rem;
+            height: 1.1rem;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .node-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .node-children {
+            margin-left: 2rem;
+            padding-left: 1rem;
+            border-left: 1px dashed var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 0.5rem;
         }
     </style>
 </head>
 <body>
     <!-- Fixed Sidebar -->
     <aside class="sidebar">
-        <div class="logo-container">
-            <div class="logo-icon">D</div>
-            <span class="logo-text">DocLens</span>
+        <div class="brand">
+            Doc<span>Lens</span>
         </div>
-        <nav>
-            <ul class="menu-list">
-                <li class="menu-item active">
-                    <a href="/templates">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                        Templates
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="/fields">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-                        Campos
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="/extraction">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        Extração
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <ul class="nav-links">
+            <li><a href="/">Dashboard</a></li>
+            <li class="active"><a href="/templates">Templates</a></li>
+            <li><a href="/fields">Campos</a></li>
+            <li><a href="/extraction">Extração</a></li>
+        </ul>
     </aside>
 
-    <!-- Workspace -->
-    <main class="workspace">
+    <!-- Main Content -->
+    <main class="main-content">
+        <header>
+            <h1 th:text="${templateId == null} ? 'Novo Template' : 'Editar Template'">Salvar Template</h1>
+        </header>
+
         <div class="card">
-            <h2 class="page-title" th:text="${templateId == null} ? 'Novo Template' : 'Editar Template'">Salvar Template</h2>
             <form th:action="${templateId == null} ? '/templates' : '/templates/edit/' + ${templateId}" 
                   th:object="${template}" method="post" id="templateForm">
                 
@@ -319,18 +349,18 @@
 
                     <div class="form-group">
                         <label for="name">Nome Amigável</label>
-                        <input type="text" id="name" th:field="*{name}" placeholder="Ex: Nota Fiscal de Serviços" required />
+                        <input type="text" id="name" th:field="*{name}" placeholder="Ex: Nota Fiscal" required />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="description">Descrição</label>
-                    <textarea id="description" th:field="*{description}" rows="2" placeholder="Insira uma breve descrição..."></textarea>
+                    <textarea id="description" th:field="*{description}" rows="2" placeholder="Breve descrição do template..."></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="propHints">Instruções para IA (Prop Hints)</label>
-                    <textarea id="propHints" th:field="*{propHints}" rows="2" placeholder="Dicas para ajudar na extração dos dados..."></textarea>
+                    <textarea id="propHints" th:field="*{propHints}" rows="2" placeholder="Instruções específicas para a extração do Gemini..."></textarea>
                 </div>
 
                 <div class="form-group">
@@ -343,42 +373,15 @@
 
                 <!-- Fields Section -->
                 <div class="section-title">
-                    <span>Campos Aninhados</span>
-                    <button type="button" class="btn btn-add btn-sm" onclick="addFieldRow()">+ Adicionar Campo</button>
+                    <span>Estrutura de Campos</span>
+                    <button type="button" class="btn btn-add btn-sm" onclick="addRootField()">+ Adicionar Campo Raiz</button>
                 </div>
 
-                <table class="fields-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 25%;">Código</th>
-                            <th style="width: 25%;">Nome</th>
-                            <th style="width: 25%;">Tipo</th>
-                            <th style="width: 15%; text-align: center;">Obrigatório</th>
-                            <th style="width: 10%;">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="fieldsContainer">
-                        <tr th:each="f, iter : *{fields}" th:id="'field-row-' + ${iter.index}">
-                            <td>
-                                <input type="text" th:field="*{fields[__${iter.index}__].code}" placeholder="codigo_campo" required />
-                            </td>
-                            <td>
-                                <input type="text" th:field="*{fields[__${iter.index}__].name}" placeholder="Nome do Campo" required />
-                            </td>
-                            <td>
-                                <select th:field="*{fields[__${iter.index}__].type}">
-                                    <option th:each="tp : ${fieldTypes}" th:value="${tp}" th:text="${tp}">STRING</option>
-                                </select>
-                            </td>
-                            <td style="text-align: center;">
-                                <input type="checkbox" th:field="*{fields[__${iter.index}__].required}" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-light);" />
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm" th:onclick="'removeFieldRow(' + ${iter.index} + ')'">Remover</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <!-- Container para a árvore interativa -->
+                <div id="fieldsTreeContainer" class="tree-container"></div>
+
+                <!-- Hidden inputs container generated dynamically on submit -->
+                <div id="hiddenInputsContainer" style="display: none;"></div>
 
                 <div class="btn-group">
                     <button type="submit" class="btn btn-primary" style="flex: 1;">Salvar</button>
@@ -388,84 +391,260 @@
         </div>
     </main>
 
-    <!-- Dropdown clone templates -->
-    <div style="display: none;">
-        <select id="typeOptionsTemplate">
-            <option th:each="tp : ${fieldTypes}" th:value="${tp}" th:text="${tp}"></option>
-        </select>
-    </div>
-
     <script th:inline="javascript">
         /*<![CDATA[*/
-        let fieldCount = [[${template.fields != null ? template.fields.size() : 0}]];
-        const fieldTypesOptionsHtml = document.getElementById('typeOptionsTemplate').innerHTML;
+        // Campos iniciais fornecidos pelo servidor
+        const initialFields = /*[[${template.fields}]]*/ [];
+        
+        // Estrutura de árvore interna no JS
+        let treeData = [];
 
-        function addFieldRow() {
-            const container = document.getElementById('fieldsContainer');
-            const newRow = document.createElement('tr');
-            newRow.id = `field-row-${fieldCount}`;
+        // Inicializa a árvore a partir da lista plana do Thymeleaf
+        function initTree() {
+            if (!initialFields || initialFields.length === 0) {
+                return;
+            }
 
-            newRow.innerHTML = `
-                <td>
-                    <input type="text" name="fields[${fieldCount}].code" placeholder="codigo_campo" required />
-                </td>
-                <td>
-                    <input type="text" name="fields[${fieldCount}].name" placeholder="Nome do Campo" required />
-                </td>
-                <td>
-                    <select name="fields[${fieldCount}].type">
-                        ${fieldTypesOptionsHtml}
-                    </select>
-                </td>
-                <td style="text-align: center;">
-                    <input type="checkbox" name="fields[${fieldCount}].required" value="true" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-light);" />
-                    <input type="hidden" name="_fields[${fieldCount}].required" value="on" />
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removeFieldRow(${fieldCount})">Remover</button>
-                </td>
-            `;
-            container.appendChild(newRow);
-            fieldCount++;
+            // Criar nós e indexar por código
+            const nodesMap = {};
+            initialFields.forEach(f => {
+                const isListVal = (f.type === 'LIST');
+                const isCompositeVal = (f.type === 'COMPOSITE');
+                nodesMap[f.code] = {
+                    id: generateId(),
+                    code: f.code || "",
+                    name: f.name || "",
+                    type: (isListVal || isCompositeVal) ? "STRING" : f.type,
+                    required: f.required || false,
+                    isList: isListVal,
+                    parentFieldCode: f.parentFieldCode || "",
+                    children: []
+                };
+            });
+
+            // Ligar nós filhos aos pais correspondentes
+            initialFields.forEach(f => {
+                const node = nodesMap[f.code];
+                if (f.parentFieldCode && nodesMap[f.parentFieldCode]) {
+                    nodesMap[f.parentFieldCode].children.push(node);
+                } else {
+                    treeData.push(node);
+                }
+            });
         }
 
-        function removeFieldRow(index) {
-            const row = document.getElementById(`field-row-${index}`);
-            if (row) {
-                row.remove();
-                reindexRows();
+        function generateId() {
+            return Math.random().toString(36).substring(2, 9);
+        }
+
+        function addRootField() {
+            const newNode = {
+                id: generateId(),
+                code: "",
+                name: "",
+                type: "STRING",
+                required: false,
+                isList: false,
+                parentFieldCode: "",
+                children: []
+            };
+            treeData.push(newNode);
+            renderTree();
+        }
+
+        function addChildField(parentId) {
+            const parentNode = findNodeById(treeData, parentId);
+            if (parentNode) {
+                const newNode = {
+                    id: generateId(),
+                    code: "",
+                    name: "",
+                    type: "STRING",
+                    required: false,
+                    isList: false,
+                    parentFieldCode: parentNode.code,
+                    children: []
+                };
+                parentNode.children.push(newNode);
+                renderTree();
             }
         }
 
-        function reindexRows() {
-            const rows = document.querySelectorAll('#fieldsContainer tr');
-            fieldCount = 0;
-            rows.forEach((row, i) => {
-                row.id = `field-row-${i}`;
-                
-                const codeInput = row.querySelector('input[name*="].code"]');
-                if (codeInput) codeInput.name = `fields[${i}].code`;
+        function removeNode(id) {
+            treeData = removeNodeById(treeData, id);
+            renderTree();
+        }
 
-                const nameInput = row.querySelector('input[name*="].name"]');
-                if (nameInput) nameInput.name = `fields[${i}].name`;
-
-                const typeSelect = row.querySelector('select[name*="].type"]');
-                if (typeSelect) typeSelect.name = `fields[${i}].type`;
-
-                const reqCheckbox = row.querySelector('input[type="checkbox"][name*="].required"]');
-                if (reqCheckbox) reqCheckbox.name = `fields[${i}].required`;
-                
-                const hiddenInput = row.querySelector('input[type="hidden"][name*="].required"]');
-                if (hiddenInput) hiddenInput.name = `_fields[${i}].required`;
-
-                const removeBtn = row.querySelector('button');
-                if (removeBtn) {
-                    removeBtn.setAttribute('onclick', `removeFieldRow(${i})`);
+        function findNodeById(nodes, id) {
+            for (let node of nodes) {
+                if (node.id === id) return node;
+                if (node.children && node.children.length > 0) {
+                    const found = findNodeById(node.children, id);
+                    if (found) return found;
                 }
-                
-                fieldCount++;
+            }
+            return null;
+        }
+
+        function removeNodeById(nodes, id) {
+            return nodes.filter(node => {
+                if (node.id === id) return false;
+                if (node.children && node.children.length > 0) {
+                    node.children = removeNodeById(node.children, id);
+                }
+                return true;
             });
         }
+
+        // Renderiza a árvore recursivamente no DOM
+        function renderTree() {
+            const container = document.getElementById('fieldsTreeContainer');
+            container.innerHTML = "";
+            if (treeData.length === 0) {
+                container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhum campo cadastrado. Clique em "Adicionar Campo Raiz".</div>`;
+                return;
+            }
+            treeData.forEach(node => {
+                container.appendChild(createNodeElement(node));
+            });
+        }
+
+        function createNodeElement(node) {
+            const el = document.createElement('div');
+            el.className = 'tree-node';
+            el.id = `node-${node.id}`;
+
+            const hasChildren = node.children && node.children.length > 0;
+
+            el.innerHTML = `
+                <div class="node-row">
+                    <div class="node-input-group">
+                        <label>Código Único</label>
+                        <input type="text" class="node-code" value="${node.code}" placeholder="codigo_campo" required />
+                    </div>
+                    <div class="node-input-group">
+                        <label>Nome Exibido</label>
+                        <input type="text" class="node-name" value="${node.name}" placeholder="Nome do Campo" required />
+                    </div>
+                    <div class="node-input-group node-type-group" style="${hasChildren ? 'display: none;' : ''}">
+                        <label>Tipo do Dado</label>
+                        <select class="node-type">
+                            <option value="STRING" ${node.type === 'STRING' ? 'selected' : ''}>STRING</option>
+                            <option value="NUMBER" ${node.type === 'NUMBER' ? 'selected' : ''}>NUMBER</option>
+                            <option value="DATE" ${node.type === 'DATE' ? 'selected' : ''}>DATE</option>
+                            <option value="BOOLEAN" ${node.type === 'BOOLEAN' ? 'selected' : ''}>BOOLEAN</option>
+                        </select>
+                    </div>
+                    <div class="node-input-group checkbox-item">
+                        <input type="checkbox" class="node-required" ${node.required ? 'checked' : ''} id="req-${node.id}" />
+                        <label for="req-${node.id}">Obrigatório</label>
+                    </div>
+                    <div class="node-input-group checkbox-item">
+                        <input type="checkbox" class="node-islist" ${node.isList ? 'checked' : ''} id="list-${node.id}" />
+                        <label for="list-${node.id}">É Lista (Se repete)</label>
+                    </div>
+                    <div class="node-actions">
+                        <button type="button" class="btn btn-add btn-sm" onclick="addChildField('${node.id}')">+ Subcampo</button>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removeNode('${node.id}')">Remover</button>
+                    </div>
+                </div>
+                <div class="node-children" id="children-${node.id}"></div>
+            `;
+
+            // Escuta alterações de inputs e sincroniza no objeto da árvore
+            el.querySelector('.node-code').addEventListener('input', (e) => {
+                node.code = e.target.value.trim();
+                // Atualiza parentFieldCode dos filhos em tempo real
+                node.children.forEach(c => c.parentFieldCode = node.code);
+            });
+            el.querySelector('.node-name').addEventListener('input', (e) => {
+                node.name = e.target.value.trim();
+            });
+            el.querySelector('.node-type').addEventListener('change', (e) => {
+                node.type = e.target.value;
+            });
+            el.querySelector('.node-required').addEventListener('change', (e) => {
+                node.required = e.target.checked;
+            });
+            el.querySelector('.node-islist').addEventListener('change', (e) => {
+                node.isList = e.target.checked;
+            });
+
+            // Adiciona nós filhos recursivamente
+            if (hasChildren) {
+                const childrenContainer = el.querySelector(`#children-${node.id}`);
+                node.children.forEach(child => {
+                    child.parentFieldCode = node.code;
+                    childrenContainer.appendChild(createNodeElement(child));
+                });
+            }
+
+            return el;
+        }
+
+        // Reconstrói a árvore de dados em lista plana antes do submit
+        function flattenTree(nodes, flatList) {
+            nodes.forEach(node => {
+                const hasChildren = node.children && node.children.length > 0;
+                let finalType = node.type;
+                if (hasChildren) {
+                    finalType = node.isList ? "LIST" : "COMPOSITE";
+                } else if (node.isList) {
+                    finalType = "LIST";
+                }
+
+                flatList.push({
+                    code: node.code,
+                    name: node.name,
+                    type: finalType,
+                    required: node.required,
+                    parentFieldCode: node.parentFieldCode
+                });
+
+                if (hasChildren) {
+                    flattenTree(node.children, flatList);
+                }
+            });
+        }
+
+        // Intercepta o envio do formulário para gerar os inputs ocultos correspondentes à lista plana
+        const templateForm = document.getElementById('templateForm');
+        templateForm.addEventListener('submit', (e) => {
+            const flatList = [];
+            flattenTree(treeData, flatList);
+
+            // Validação de códigos duplicados ou vazios
+            const codes = flatList.map(f => f.code.trim());
+            if (codes.some(c => c === "")) {
+                alert("Todos os campos devem possuir um Código Único preenchido!");
+                e.preventDefault();
+                return;
+            }
+            const uniqueCodes = new Set(codes);
+            if (uniqueCodes.size !== codes.length) {
+                alert("Erro: Há códigos duplicados na sua estrutura de campos!");
+                e.preventDefault();
+                return;
+            }
+
+            // Gerar inputs ocultos no DOM para o Spring bindar
+            const hiddenContainer = document.getElementById('hiddenInputsContainer');
+            hiddenContainer.innerHTML = "";
+
+            flatList.forEach((f, i) => {
+                hiddenContainer.innerHTML += `
+                    <input type="hidden" name="fields[${i}].code" value="${f.code}" />
+                    <input type="hidden" name="fields[${i}].name" value="${f.name}" />
+                    <input type="hidden" name="fields[${i}].type" value="${f.type}" />
+                    <input type="hidden" name="fields[${i}].required" value="${f.required}" />
+                    <input type="hidden" name="fields[${i}].parentFieldCode" value="${f.parentFieldCode}" />
+                `;
+            });
+        });
+
+        // Inicialização
+        initTree();
+        renderTree();
         /*]]>*/
     </script>
 </body>

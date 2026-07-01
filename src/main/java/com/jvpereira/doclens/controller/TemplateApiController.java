@@ -26,4 +26,26 @@ public class TemplateApiController {
     public ResponseEntity<List<TemplateResponseDTO>> findAll() {
         return ResponseEntity.ok(templateService.findAll());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TemplateResponseDTO> findById(@PathVariable("id") java.util.UUID id) {
+        return ResponseEntity.ok(templateService.findById(id));
+    }
+
+    @GetMapping("/tag/{tag}")
+    public ResponseEntity<TemplateResponseDTO> findByTag(@PathVariable("tag") String tag) {
+        return ResponseEntity.ok(templateService.findByTag(tag));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TemplateResponseDTO> update(@PathVariable("id") java.util.UUID id, 
+                                                      @RequestBody TemplateRequestDTO requestDTO) {
+        return ResponseEntity.ok(templateService.update(id, requestDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") java.util.UUID id) {
+        templateService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

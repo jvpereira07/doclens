@@ -31,6 +31,9 @@ public class FieldViewController {
         model.addAttribute("field", new FieldRequestDTO());
         model.addAttribute("templates", templateService.findAll());
         model.addAttribute("fieldTypes", FieldType.values());
+        model.addAttribute("parentFields", fieldService.findAll().stream()
+                .filter(f -> f.getType() == FieldType.COMPOSITE || f.getType() == FieldType.LIST)
+                .collect(java.util.stream.Collectors.toList()));
         return "fields/form-field";
     }
 
@@ -51,12 +54,16 @@ public class FieldViewController {
                 .required(field.getRequired())
                 .type(field.getType())
                 .templateId(field.getTemplateId())
+                .parentFieldId(field.getParentFieldId())
                 .build();
 
         model.addAttribute("field", requestDTO);
         model.addAttribute("fieldId", id);
         model.addAttribute("templates", templateService.findAll());
         model.addAttribute("fieldTypes", FieldType.values());
+        model.addAttribute("parentFields", fieldService.findAll().stream()
+                .filter(f -> !f.getId().equals(id) && (f.getType() == FieldType.COMPOSITE || f.getType() == FieldType.LIST))
+                .collect(java.util.stream.Collectors.toList()));
         return "fields/form-field";
     }
 

@@ -31,4 +31,9 @@ public class Field {
     @ManyToOne
     @JoinColumn(name = "template_id")
     private Template template;
+    @ManyToOne
+    @JoinColumn(name = "parent_field_id")
+    private Field parentField;
+    @OneToMany(mappedBy = "parentField", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.Set<Field> subFields = new java.util.HashSet<>();
 }

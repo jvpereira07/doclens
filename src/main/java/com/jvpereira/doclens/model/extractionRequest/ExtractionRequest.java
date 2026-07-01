@@ -32,5 +32,7 @@ public class ExtractionRequest {
     @OneToOne
     @JoinColumn(name = "file_id")
     private File file;
-
+    @ManyToOne
+    @JoinColumn(name = "template_id")
+    private com.jvpereira.doclens.model.template.Template template;
 }

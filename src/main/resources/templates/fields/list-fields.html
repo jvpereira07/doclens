@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>DocLens - Campos</title>
+    <title>DocLens - Campos de Extração</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,8 +15,6 @@
             --accent: #a3a3a3;
             --text-main: #ffffff;
             --text-muted: #a3a3a3;
-            --success: #ffffff;
-            --danger: #444444;
             --sidebar-width: 260px;
         }
 
@@ -39,94 +37,73 @@
             width: var(--sidebar-width);
             background-color: var(--sidebar-bg);
             border-right: 1px solid var(--border-color);
-            padding: 2.5rem 1.5rem;
             display: flex;
             flex-direction: column;
+            padding: 2rem 1.5rem;
             position: fixed;
-            top: 0;
-            bottom: 0;
+            height: 100vh;
             left: 0;
+            top: 0;
             z-index: 100;
         }
 
-        .logo-container {
-            margin-bottom: 3.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: #ffffff;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #000000;
-            font-size: 1.2rem;
-        }
-
-        .logo-text {
+        .brand {
             font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: -0.04em;
-            background: linear-gradient(135deg, #fff, #9ca3af);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.05em;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
         }
 
-        .menu-list {
+        .brand span {
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .nav-links {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
-        .menu-item a {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.85rem 1.25rem;
+        .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
+            padding: 0.8rem 1rem;
             border-radius: 0.5rem;
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
         }
 
-        .menu-item a:hover {
-            color: var(--text-main);
-            background: rgba(255, 255, 255, 0.03);
+        .nav-links a:hover, .nav-links li.active a {
+            color: var(--primary);
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
-        .menu-item.active a {
-            color: #000000;
-            background: #ffffff;
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
-            font-weight: 600;
-        }
-
-        /* Workspace */
-        .workspace {
+        /* Main Content */
+        .main-content {
             margin-left: var(--sidebar-width);
-            padding: 3rem 4rem;
             flex-grow: 1;
-            max-width: calc(100% - var(--sidebar-width));
+            padding: 3rem;
+            max-width: 1400px;
         }
 
-        .workspace-header {
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
         }
 
-        .page-title {
-            font-size: 2rem;
+        header h1 {
+            font-size: 2.25rem;
             font-weight: 700;
             letter-spacing: -0.03em;
         }
@@ -156,7 +133,6 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             background: #e5e5e5;
-            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
         }
 
         .btn-sm {
@@ -244,48 +220,35 @@
             display: flex;
             gap: 0.5rem;
         }
+
+        .actions-cell form {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
     <!-- Fixed Sidebar -->
     <aside class="sidebar">
-        <div class="logo-container">
-            <div class="logo-icon">D</div>
-            <span class="logo-text">DocLens</span>
+        <div class="brand">
+            Doc<span>Lens</span>
         </div>
-        <nav>
-            <ul class="menu-list">
-                <li class="menu-item">
-                    <a href="/templates">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                        Templates
-                    </a>
-                </li>
-                <li class="menu-item active">
-                    <a href="/fields">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-                        Campos
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="/extraction">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        Extração
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <ul class="nav-links">
+            <li><a href="/">Dashboard</a></li>
+            <li><a href="/templates">Templates</a></li>
+            <li class="active"><a href="/fields">Campos</a></li>
+            <li><a href="/extraction">Extração</a></li>
+        </ul>
     </aside>
 
-    <!-- Main Workspace -->
-    <main class="workspace">
-        <div class="workspace-header">
-            <h1 class="page-title">Campos de Extração</h1>
+    <!-- Main Content -->
+    <main class="main-content">
+        <header>
+            <h1>Campos de Extração</h1>
             <a href="/fields/new" class="btn btn-primary">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
                 Novo Campo
             </a>
-        </div>
+        </header>
 
         <div class="card">
             <table>
@@ -295,6 +258,7 @@
                         <th>Nome</th>
                         <th>Tipo</th>
                         <th>Obrigatoriedade</th>
+                        <th>Pai</th>
                         <th>ID Template Associado</th>
                         <th>Ações</th>
                     </tr>
@@ -309,13 +273,17 @@
                                   th:classappend="${f.required ? 'badge-required' : 'badge-optional'}"
                                   th:text="${f.required ? 'Obrigatório' : 'Opcional'}">Opcional</span>
                         </td>
-                        <td style="font-family: monospace; font-size: 0.85rem;" th:text="${f.templateId != null ? f.templateId : 'Nenhum'}">UUID ou Nenhum</td>
+                        <td style="font-family: monospace; font-size: 0.9rem;" th:text="${f.parentFieldCode != null ? f.parentFieldCode : '-'}">-</td>
+                        <td style="font-family: monospace; font-size: 0.85rem;" th:text="${f.templateId != null ? f.templateId : 'Nenhum'}">Nenhum</td>
                         <td class="actions-cell">
                             <a th:href="@{/fields/edit/{id}(id=${f.id})}" class="btn btn-secondary btn-sm">Editar</a>
                             <form th:action="@{/fields/delete/{id}(id=${f.id})}" method="post">
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Deseja excluir este campo?')">Excluir</button>
                             </form>
                         </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(fields)}">
+                        <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhum campo registrado ainda.</td>
                     </tr>
                 </tbody>
             </table>

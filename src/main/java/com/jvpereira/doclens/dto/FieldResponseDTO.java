@@ -20,4 +20,7 @@ public class FieldResponseDTO {
     private Boolean required;
     private FieldType type;
     private UUID templateId;
+    private UUID parentFieldId;
+    private String parentFieldCode;
+    private java.util.List<FieldResponseDTO> subFields;
 }

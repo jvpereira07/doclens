@@ -6,6 +6,7 @@ import com.jvpereira.doclens.exception.ResourceNotFoundException;
 import com.jvpereira.doclens.model.extractionRequest.ExtractionRequest;
 import com.jvpereira.doclens.model.extractionRequest.ExtractionStatus;
 import com.jvpereira.doclens.model.extractionResult.ExtractionResult;
+import com.jvpereira.doclens.model.field.Field;
 import com.jvpereira.doclens.model.file.File;
 import com.jvpereira.doclens.model.template.Template;
 import com.jvpereira.doclens.repository.ExtractionRequestRepository;
@@ -26,7 +27,9 @@ import java.net.http.HttpResponse;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -72,12 +75,8 @@ public class ExtractionRequestService {
         }
         promptBuilder.append("\nFields to extract (return a JSON object mapping the field code to the extracted value):\n");
         for (var field : template.getFields()) {
-            promptBuilder.append("- Code: \"").append(field.getCode()).append("\"\n");
-            promptBuilder.append("  Name: ").append(field.getName()).append("\n");
-            promptBuilder.append("  Type: ").append(field.getType().name()).append("\n");
-            promptBuilder.append("  Required: ").append(field.getRequired()).append("\n");
-            if (field.getDescription() != null) {
-                promptBuilder.append("  Description/Instructions: ").append(field.getDescription()).append("\n");
+            if (field.getParentField() == null) {
+                appendFieldToPrompt(promptBuilder, field, 0);
             }
         }
         promptBuilder.append("\nStrict Rules:\n");
@@ -91,6 +90,7 @@ public class ExtractionRequestService {
         // 4. Save ExtractionRequest entity as pending/processing
         ExtractionRequest extractionRequest = new ExtractionRequest();
         extractionRequest.setFile(file);
+        extractionRequest.setTemplate(template);
         extractionRequest.setPromptUsed(prompt);
         extractionRequest.setCreatedAt(Instant.now());
         extractionRequest.setStatus(ExtractionStatus.AI_ERROR); // default error state in case API call fails
@@ -218,6 +218,16 @@ public class ExtractionRequestService {
         return extractionRequestRepository.findAllByOrderByCreatedAtDesc();
     }
 
+    public java.util.Optional<ExtractionRequest> getExtractionRequestById(java.util.UUID id) {
+        return extractionRequestRepository.findById(id);
+    }
+
+    public Map<java.util.UUID, Integer> getDelays() {
+        return extractionResultRepository.findAll().stream()
+                .filter(res -> res.getRequest() != null)
+                .collect(Collectors.toMap(res -> res.getRequest().getId(), ExtractionResult::getProcessTimeMs, (a, b) -> a));
+    }
+
     public byte[] downloadFile(java.util.UUID fileId) {
         File file = fileRepository.findById(fileId)
                 .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + fileId));
@@ -231,5 +241,62 @@ public class ExtractionRequestService {
 
     public java.util.Optional<ExtractionResult> getExtractionResultByRequestId(java.util.UUID requestId) {
         return extractionResultRepository.findByRequestId(requestId);
+    }
+
+    public Map<String, Object> getDashboardStats() {
+        List<ExtractionRequest> all = extractionRequestRepository.findAll();
+        long totalExtractions = all.size();
+        long success = all.stream().filter(r -> r.getStatus() == com.jvpereira.doclens.model.extractionRequest.ExtractionStatus.SUCCESS).count();
+        long failed = totalExtractions - success;
+        double successRate = totalExtractions > 0 ? ((double) success / totalExtractions) * 100 : 0.0;
+
+        List<ExtractionResult> results = extractionResultRepository.findAll();
+        double avgTimeMs = results.stream().mapToDouble(ExtractionResult::getProcessTimeMs).average().orElse(0.0);
+
+        long totalTemplates = templateRepository.count();
+
+        // Get recent 5 extractions
+        List<ExtractionRequest> recent = all.stream()
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+                .limit(5)
+                .collect(java.util.stream.Collectors.toList());
+
+        // Group extractions by template (counting them)
+        Map<String, Long> byTemplate = all.stream()
+                .filter(r -> r.getTemplate() != null)
+                .collect(java.util.stream.Collectors.groupingBy(r -> r.getTemplate().getName(), java.util.stream.Collectors.counting()));
+
+        Map<String, Object> stats = new java.util.HashMap<>();
+        stats.put("totalExtractions", totalExtractions);
+        stats.put("successCount", success);
+        stats.put("failedCount", failed);
+        stats.put("successRate", String.format(java.util.Locale.US, "%.1f", successRate));
+        stats.put("avgTimeMs", (int) avgTimeMs);
+        stats.put("totalTemplates", totalTemplates);
+        stats.put("recentExtractions", recent);
+        stats.put("byTemplate", byTemplate);
+
+        return stats;
+    }
+
+    private void appendFieldToPrompt(StringBuilder sb, Field field, int indent) {
+        String spaces = "  ".repeat(indent);
+        sb.append(spaces).append("- Code: \"").append(field.getCode()).append("\"\n");
+        sb.append(spaces).append("  Name: ").append(field.getName()).append("\n");
+        sb.append(spaces).append("  Type: ").append(field.getType().name()).append("\n");
+        sb.append(spaces).append("  Required: ").append(field.getRequired()).append("\n");
+        if (field.getDescription() != null) {
+            sb.append(spaces).append("  Description/Instructions: ").append(field.getDescription()).append("\n");
+        }
+
+        if ((field.getType() == com.jvpereira.doclens.model.field.FieldType.COMPOSITE || 
+             field.getType() == com.jvpereira.doclens.model.field.FieldType.LIST) && 
+            field.getSubFields() != null && !field.getSubFields().isEmpty()) {
+            
+            sb.append(spaces).append("  Sub-fields:\n");
+            for (var sub : field.getSubFields()) {
+                appendFieldToPrompt(sb, sub, indent + 2);
+            }
+        }
     }
 }

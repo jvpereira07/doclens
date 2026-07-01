@@ -6,7 +6,7 @@ Projeto em Spring Boot para extração de dados estruturados de documentos usand
 
 Adicione as credenciais e variáveis no seu ambiente ou no `application.yaml`:
 
-- `GEMINI_API_KEY`: Chave da API do Gemini.
+- `GEMINI_API_KEY`: Chave da API do Gemini.xxx'x'
 - `MINIO_URL`: Endpoint do MinIO (Padrão: `http://localhost:9000`).
 - `MINIO_ACCESS_KEY`: Chave de acesso do MinIO (Padrão: `minioadmin`).
 - `MINIO_SECRET_KEY`: Chave secreta do MinIO (Padrão: `minioadmin`).

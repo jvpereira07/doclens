@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DocLens - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --sidebar-bg: #121212;
+            --card-bg: #1a1a1a;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #ffffff;
+            --primary-light: #e5e5e5;
+            --accent: #a3a3a3;
+            --text-main: #ffffff;
+            --text-muted: #a3a3a3;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+        }
+
+        .brand span {
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.8rem 1rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover, .nav-links li.active a {
+            color: var(--primary);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 3rem;
+            max-width: 1400px;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .stat-card .label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+        }
+
+        .stat-card .desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Dashboard Sections Layout */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 2rem;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        /* Tables & Lists styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+        }
+
+        .status-deprecated {
+            background: rgba(244, 63, 94, 0.1);
+            color: #fb7185;
+        }
+
+        .template-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .template-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .template-item:last-child {
+            border-bottom: none;
+        }
+
+        .template-name {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .template-count {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.25rem 0.6rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            Doc<span>Lens</span>
+        </div>
+        <ul class="nav-links">
+            <li class="active"><a href="/">Dashboard</a></li>
+            <li><a href="/templates">Templates</a></li>
+            <li><a href="/fields">Campos</a></li>
+            <li><a href="/extraction">Extração</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header>
+            <h1>Monitoramento do DocLens</h1>
+            <p>Estatísticas gerais de extrações estruturadas e saúde do sistema.</p>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="label">Total de Extrações</span>
+                <span class="value" th:text="${totalExtractions}">0</span>
+                <span class="desc">Documentos submetidos à IA</span>
+            </div>
+            <div class="stat-card">
+                <span class="label">Taxa de Sucesso</span>
+                <span class="value" th:text="${successRate} + '%'">0%</span>
+                <span class="desc">Extrações concluídas</span>
+            </div>
+            <div class="stat-card">
+                <span class="label">Tempo Médio (IA)</span>
+                <span class="value" th:text="${avgTimeMs} + 'ms'">0ms</span>
+                <span class="desc">Tempo de resposta da API</span>
+            </div>
+            <div class="stat-card">
+                <span class="label">Templates Ativos</span>
+                <span class="value" th:text="${totalTemplates}">0</span>
+                <span class="desc">Modelos de extração</span>
+            </div>
+        </div>
+
+        <!-- Sections Grid -->
+        <div class="sections-grid">
+            <!-- Recent Extractions -->
+            <div class="card">
+                <h2>Últimas Extrações</h2>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Arquivo</th>
+                                <th>Template</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="ext : ${recentExtractions}">
+                                <td class="date-cell" th:data-timestamp="${ext.createdAt}" th:text="${ext.createdAt}">10/10/2026 15:30</td>
+                                <td th:text="${ext.file != null ? ext.file.name : 'Sem arquivo'}">documento.pdf</td>
+                                <td th:text="${ext.template != null ? ext.template.name : 'N/A'}">RG</td>
+                                <td>
+                                    <span class="badge" th:classappend="${ext.status.name() == 'SUCCESS' ? 'status-active' : 'status-deprecated'}" th:text="${ext.status}">SUCCESS</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(recentExtractions)}">
+                                <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhuma extração registrada ainda.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Extractions by Template -->
+            <div class="card">
+                <h2>Uso por Template</h2>
+                <ul class="template-list">
+                    <li th:each="entry : ${byTemplate.entrySet()}" class="template-item">
+                        <span class="template-name" th:text="${entry.key}">Template</span>
+                        <span class="template-count" th:text="${entry.value} + ' docs'">0</span>
+                    </li>
+                    <li th:if="${#maps.isEmpty(byTemplate)}" style="color: var(--text-muted); text-align: center; padding: 2rem;">
+                        Sem dados de uso.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Format dates on load
+        document.querySelectorAll('.date-cell').forEach(el => {
+            const ts = el.getAttribute('data-timestamp');
+            if (ts) {
+                try {
+                    const date = new Date(ts);
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    el.textContent = `${day}/${month}/${year} ${hours}:${minutes}`;
+                } catch (e) {
+                    // fall back to default
+                }
+            }
+        });
+    </script>
+</body>
+</html>

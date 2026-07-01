@@ -24,6 +24,7 @@ public class ExtractionViewController {
     public String extractionPage(Model model) {
         model.addAttribute("templates", templateService.findAll());
         model.addAttribute("extractions", extractionRequestService.getAllExtractions());
+        model.addAttribute("delays", extractionRequestService.getDelays());
         return "extraction/extract";
     }
 

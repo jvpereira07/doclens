@@ -71,7 +71,7 @@ public class TemplateMapper {
             // Remove existing fields that are not in the new request
             template.getFields().removeIf(existingField -> !incomingFields.containsKey(existingField.getCode()));
 
-            // Update existing or insert new fields
+            // Pass 1: Update existing or insert new fields flatly
             for (var entry : incomingFields.entrySet()) {
                 String code = entry.getKey();
                 var fReq = entry.getValue();
@@ -86,6 +86,29 @@ public class TemplateMapper {
                 } else {
                     Field newField = fieldMapper.toEntity(fReq, template);
                     template.getFields().add(newField);
+                }
+            }
+
+            // Pass 2: Set parentField relationships using parentFieldCode
+            for (var entry : incomingFields.entrySet()) {
+                String code = entry.getKey();
+                var fReq = entry.getValue();
+
+                Field field = template.getFields().stream()
+                        .filter(f -> f.getCode().equals(code))
+                        .findFirst()
+                        .orElse(null);
+
+                if (field != null) {
+                    if (fReq.getParentFieldCode() != null && !fReq.getParentFieldCode().trim().isEmpty()) {
+                        Field parent = template.getFields().stream()
+                                .filter(f -> f.getCode().equals(fReq.getParentFieldCode()))
+                                .findFirst()
+                                .orElse(null);
+                        field.setParentField(parent);
+                    } else {
+                        field.setParentField(null);
+                    }
                 }
             }
         } else {

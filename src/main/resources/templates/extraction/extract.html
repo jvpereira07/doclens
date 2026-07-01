@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>DocLens - Extração</title>
+    <title>DocLens - Extração de Documentos</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -37,203 +38,223 @@
             width: var(--sidebar-width);
             background-color: var(--sidebar-bg);
             border-right: 1px solid var(--border-color);
-            padding: 2.5rem 1.5rem;
             display: flex;
             flex-direction: column;
+            padding: 2rem 1.5rem;
             position: fixed;
-            top: 0;
-            bottom: 0;
+            height: 100vh;
             left: 0;
+            top: 0;
             z-index: 100;
         }
 
-        .logo-container {
-            margin-bottom: 3.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: #ffffff;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #000000;
-            font-size: 1.2rem;
-        }
-
-        .logo-text {
+        .brand {
             font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: -0.04em;
-            background: linear-gradient(135deg, #fff, #9ca3af);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.05em;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
         }
 
-        .menu-list {
+        .brand span {
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .nav-links {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
-        .menu-item a {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.85rem 1.25rem;
+        .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
+            padding: 0.8rem 1rem;
             border-radius: 0.5rem;
-            transition: all 0.2s;
-        }
-
-        .menu-item a:hover {
-            color: var(--text-main);
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .menu-item.active a {
-            color: #000000;
-            background: #ffffff;
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
-            font-weight: 600;
-        }
-
-        /* Workspace */
-        .workspace {
-            margin-left: var(--sidebar-width);
-            padding: 3rem 4rem;
-            flex-grow: 1;
-            max-width: calc(100% - var(--sidebar-width));
-        }
-
-        .workspace-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 2.5rem;
+            transition: all 0.2s ease;
         }
 
-        .page-title {
-            font-size: 2rem;
+        .nav-links a:hover,
+        .nav-links li.active a {
+            color: var(--primary);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 3rem;
+            max-width: 1400px;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2.25rem;
             font-weight: 700;
             letter-spacing: -0.03em;
         }
 
-        .grid {
+        /* Split Layout */
+        .split-layout {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1.2fr;
             gap: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .split-layout {
+                grid-template-columns: 1fr;
+            }
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 0.75rem;
-            padding: 2.5rem;
+            padding: 2rem;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
         }
 
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        /* Form Controls */
         .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            margin-bottom: 1.5rem;
         }
 
         label {
-            font-size: 0.9rem;
-            font-weight: 500;
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
             color: var(--text-muted);
-        }        select, input[type="file"] {
+        }
+
+        select,
+        input[type="file"] {
             width: 100%;
             padding: 0.8rem 1rem;
-            border-radius: 0.5rem;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
             color: var(--text-main);
             font-family: inherit;
             font-size: 0.95rem;
             transition: all 0.2s;
         }
 
-        select:focus, input[type="file"]:focus {
-            outline: none;
-            border-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
+        select option {
+            background-color: #121212;
+            color: #ffffff;
         }
 
+        select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.75rem 1.5rem;
+            padding: 0.7rem 1.5rem;
             border-radius: 0.5rem;
             font-weight: 600;
             text-decoration: none;
             transition: all 0.2s;
             cursor: pointer;
             border: none;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
             background: #ffffff;
             color: #000000;
             box-shadow: 0 4px 14px rgba(255, 255, 255, 0.1);
+            width: 100%;
         }
 
-        .btn:hover {
+        .btn-primary:hover {
             transform: translateY(-2px);
             background: #e5e5e5;
-            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
         }
 
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        /* JSON Result Panel */
+        .result-panel {
+            background-color: #0d0d0d;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            color: #34d399;
+            max-height: 400px;
         }
 
-        /* Result Panel */
-        .result-title {
+        .error-panel {
+            background-color: rgba(244, 63, 94, 0.05);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+            color: #fb7185;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        /* History Table */
+        .history-section {
+            margin-top: 3rem;
+        }
+
+        .history-section h2 {
             font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            padding: 1rem 0.75rem;
+            color: var(--text-muted);
             font-weight: 600;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
         }
 
-        pre {
-            background: #000000;
-            padding: 1.25rem;
-            border-radius: 0.5rem;
-            border: 1px solid var(--border-color);
-            font-family: 'Courier New', Courier, monospace;
+        td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
             font-size: 0.9rem;
-            overflow-x: auto;
-            color: #818cf8; /* Nice console blue/purple color */
-            min-height: 200px;
-            white-space: pre-wrap;
-        }
-
-        .error-message {
-            color: #fb7185;
-            background: rgba(244, 63, 94, 0.1);
-            border: 1px solid rgba(244, 63, 94, 0.2);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            font-size: 0.9rem;
-            display: none;
         }
 
         .badge {
@@ -255,213 +276,193 @@
             color: #fb7185;
         }
 
-        .loader {
-            display: none;
+        /* Thumbnail styling */
+        .thumbnail-container {
+            display: flex;
             align-items: center;
             gap: 0.75rem;
-            font-size: 0.95rem;
-            color: var(--text-muted);
         }
 
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-top: 2px solid #ffffff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .thumbnail-img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 0.35rem;
+            border: 1px solid var(--border-color);
+            background-color: #000;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .file-link {
+            color: var(--primary-light);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .file-link:hover {
+            text-decoration: underline;
+            color: #fff;
         }
     </style>
 </head>
+
 <body>
     <!-- Fixed Sidebar -->
     <aside class="sidebar">
-        <div class="logo-container">
-            <div class="logo-icon">D</div>
-            <span class="logo-text">DocLens</span>
+        <div class="brand">
+            Doc<span>Lens</span>
         </div>
-        <nav>
-            <ul class="menu-list">
-                <li class="menu-item">
-                    <a href="/templates">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                        Templates
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="/fields">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-                        Campos
-                    </a>
-                </li>
-                <li class="menu-item active">
-                    <a href="/extraction">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        Extração
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <ul class="nav-links">
+            <li><a href="/">Dashboard</a></li>
+            <li><a href="/templates">Templates</a></li>
+            <li><a href="/fields">Campos</a></li>
+            <li class="active"><a href="/extraction">Extração</a></li>
+        </ul>
     </aside>
 
-    <!-- Main Workspace -->
-    <main class="workspace">
-        <div class="workspace-header">
-            <h1 class="page-title">Extração Inteligente</h1>
-        </div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <header>
+            <h1>Extração Multimodal</h1>
+        </header>
 
-        <div class="grid">
+        <div class="split-layout">
             <!-- Form Card -->
             <div class="card">
-                <div class="form-group">
-                    <label for="templateSelect">Selecione o Template</label>
-                    <select id="templateSelect">
-                        <option value="">-- Escolha um Template --</option>
-                        <option th:each="t : ${templates}" th:value="${t.tag}" th:text="${t.name} + ' (#' + ${t.tag} + ')'"></option>
-                    </select>
-                </div>
+                <h2>Enviar Documento</h2>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="templateSelect">Template de Extração</label>
+                        <select id="templateSelect" name="templateCode" required>
+                            <option value="">-- Selecione o Template --</option>
+                            <option th:each="t : ${templates}" th:value="${t.tag}"
+                                th:text="${t.name} + ' (#' + ${t.tag} + ')'"></option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="documentFile">Arquivo do Documento</label>
-                    <input type="file" id="documentFile" />
-                </div>
+                    <div class="form-group">
+                        <label for="fileInput">Documento (Imagem ou PDF)</label>
+                        <input type="file" id="fileInput" name="file" accept="image/*,application/pdf" required />
+                    </div>
 
-                <button id="btnExtract" class="btn">Iniciar Extração</button>
-
-                <div id="loader" class="loader">
-                    <div class="spinner"></div>
-                    <span>Processando extração com a IA...</span>
-                </div>
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">
+                        Executar Extração
+                    </button>
+                </form>
             </div>
 
             <!-- Result Card -->
             <div class="card">
-                <h3 class="result-title">Resultado da Extração</h3>
-                <div id="errorPanel" class="error-message"></div>
-                <pre id="resultJson">{}</pre>
+                <h2>Resultado JSON</h2>
+                <div class="error-panel" id="errorPanel"></div>
+                <pre class="result-panel" id="resultJson">{}</pre>
             </div>
         </div>
 
-        <!-- History Card -->
-        <div class="card" style="margin-top: 2rem; max-width: 100%; overflow-x: auto;">
-            <h3 class="result-title" style="margin-bottom: 1.5rem;">Histórico de Extrações</h3>
-            <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                <thead>
-                    <tr style="border-bottom: 1px solid var(--border-color);">
-                        <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Data</th>
-                        <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Arquivo</th>
-                        <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Miniatura/Link</th>
-                        <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Status</th>
-                        <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="ext : ${extractions}" style="border-bottom: 1px solid rgba(255, 255, 255, 0.02);">
-                        <td style="padding: 1rem;" class="date-cell" th:data-timestamp="${ext.createdAt}" th:text="${ext.createdAt}">10/10/2026 15:30</td>
-                        <td style="padding: 1rem;" th:text="${ext.file != null ? ext.file.name : 'Sem arquivo'}">documento.pdf</td>
-                        <td style="padding: 1rem;">
-                            <div th:if="${ext.file != null && ext.file.storagePath != null}">
-                                <a th:href="@{/extraction/files/{id}(id=${ext.file.id})}" target="_blank" style="color: var(--text-main); text-decoration: underline; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
-                                    <img th:if="${ext.file.type.startsWith('image/')}" th:src="@{/extraction/files/{id}(id=${ext.file.id})}" style="max-width: 60px; max-height: 40px; border-radius: 4px; border: 1px solid var(--border-color); object-fit: cover;" />
-                                    <span th:text="${ext.file.type.startsWith('image/') ? 'Abrir Imagem' : 'Baixar Arquivo'}">Visualizar</span>
-                                </a>
-                            </div>
-                        </td>
-                        <td style="padding: 1rem;">
-                            <span class="badge" th:classappend="${ext.status.name() == 'SUCCESS' ? 'status-active' : 'status-deprecated'}" th:text="${ext.status}">SUCCESS</span>
-                        </td>
-                        <td style="padding: 1rem;">
-                            <button th:if="${ext.status.name() == 'SUCCESS'}" class="btn btn-view-json" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; border-radius: 0.35rem;" th:data-request-id="${ext.id}">
-                                Ver JSON
-                            </button>
-                            <span th:if="${ext.status.name() != 'SUCCESS'}" style="color: var(--text-muted); font-size: 0.85rem;">-</span>
-                        </td>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(extractions)}">
-                        <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">Nenhuma extração realizada ainda.</td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- History Section -->
+        <div class="card history-section">
+            <h2>Histórico de Extrações</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Arquivo Enviado (MinIO)</th>
+                            <th>Template</th>
+                            <th>Status</th>
+                            <th>Delay</th>
+                            <th>Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="ext : ${extractions}">
+                            <td class="date-cell" th:data-timestamp="${ext.createdAt}" th:text="${ext.createdAt}">10/10/2026 15:30</td>
+                            <td>
+                                <div class="thumbnail-container" th:if="${ext.file != null}">
+                                    <img class="thumbnail-img" th:src="@{/extraction/files/{id}(id=${ext.file.id})}" alt="Thumb" />
+                                    <a class="file-link" th:href="@{/extraction/files/{id}(id=${ext.file.id})}" th:text="${ext.file.name}" target="_blank">documento.jpg</a>
+                                </div>
+                                <span th:if="${ext.file == null}">Sem arquivo</span>
+                            </td>
+                            <td th:text="${ext.template != null ? ext.template.name : 'N/A'}">RG</td>
+                            <td>
+                                <span class="badge" th:classappend="${ext.status.name() == 'SUCCESS' ? 'status-active' : 'status-deprecated'}" th:text="${ext.status}">SUCCESS</span>
+                            </td>
+                            <td th:text="${delays != null && delays.get(ext.id) != null ? delays.get(ext.id) + ' ms' : '-'}">-</td>
+                            <td>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <button th:if="${ext.status.name() == 'SUCCESS'}" class="btn btn-view-json" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; border-radius: 0.35rem;" th:data-request-id="${ext.id}">
+                                        Ver JSON
+                                    </button>
+                                    <button class="btn btn-view-prompt" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; border-radius: 0.35rem; background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--border-color);" th:data-request-id="${ext.id}">
+                                        Ver Prompt
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(extractions)}">
+                            <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhuma extração realizada ainda.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
     <script>
-        document.getElementById('btnExtract').addEventListener('click', async () => {
-            const templateCode = document.getElementById('templateSelect').value;
-            const fileInput = document.getElementById('documentFile');
-            const file = fileInput.files[0];
-            
-            const btn = document.getElementById('btnExtract');
-            const loader = document.getElementById('loader');
-            const errorPanel = document.getElementById('errorPanel');
-            const resultJson = document.getElementById('resultJson');
+        const uploadForm = document.getElementById('uploadForm');
+        const btnSubmit = document.getElementById('btnSubmit');
+        const errorPanel = document.getElementById('errorPanel');
+        const resultJson = document.getElementById('resultJson');
 
-            if (!templateCode) {
-                alert('Por favor, selecione um template.');
-                return;
-            }
-            if (!file) {
-                alert('Por favor, selecione um arquivo.');
-                return;
-            }
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-            // Reset UI states
             errorPanel.style.display = 'none';
-            resultJson.textContent = '{}';
-            loader.style.display = 'flex';
-            btn.disabled = true;
+            resultJson.textContent = 'Processando...';
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Enviando...';
+
+            const formData = new FormData(uploadForm);
 
             try {
-                const formData = new FormData();
-                formData.append('templateCode', templateCode);
-                formData.append('file', file);
-
-                const response = await fetch('/extraction/run', {
+                const response = await fetch('/api/extraction', {
                     method: 'POST',
                     body: formData
                 });
 
                 const result = await response.json();
-                loader.style.display = 'none';
-                btn.disabled = false;
 
-                if (result.success) {
-                    // Format and print JSON response nicely
-                    const parsedData = JSON.parse(result.data);
-                    resultJson.textContent = JSON.stringify(parsedData, null, 2);
+                if (response.ok) {
+                    resultJson.textContent = JSON.stringify(result, null, 2);
                     // Reload window to show in history list
-                    setTimeout(() => window.location.reload(), 1000);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
                 } else {
-                    errorPanel.textContent = result.error || 'Erro desconhecido na extração.';
+                    errorPanel.textContent = result.error || 'Erro na extração.';
                     errorPanel.style.display = 'block';
+                    resultJson.textContent = '{}';
                 }
             } catch (err) {
-                loader.style.display = 'none';
-                btn.disabled = false;
-                errorPanel.textContent = 'Erro de rede ou conexão com o servidor.';
+                errorPanel.textContent = 'Erro de rede ou servidor.';
                 errorPanel.style.display = 'block';
+                resultJson.textContent = '{}';
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = 'Executar Extração';
             }
         });
 
         async function loadJsonResult(requestId) {
-            const errorPanel = document.getElementById('errorPanel');
-            const resultJson = document.getElementById('resultJson');
-            
             errorPanel.style.display = 'none';
-            resultJson.textContent = 'Carregando...';
+            resultJson.textContent = 'Carregando resultado...';
 
             try {
-                const response = await fetch('/extraction/results/' + requestId);
+                const response = await fetch(`/api/extraction/${requestId}/result`);
                 const result = await response.json();
 
-                if (result.success) {
-                    const parsedData = JSON.parse(result.data);
-                    resultJson.textContent = JSON.stringify(parsedData, null, 2);
+                if (response.ok) {
+                    resultJson.textContent = JSON.stringify(result, null, 2);
                 } else {
                     errorPanel.textContent = result.error || 'Erro ao carregar o JSON.';
                     errorPanel.style.display = 'block';
@@ -469,6 +470,28 @@
                 }
             } catch (err) {
                 errorPanel.textContent = 'Erro ao buscar o resultado do servidor.';
+                errorPanel.style.display = 'block';
+                resultJson.textContent = '{}';
+            }
+        }
+
+        async function loadPrompt(requestId) {
+            errorPanel.style.display = 'none';
+            resultJson.textContent = 'Carregando prompt...';
+
+            try {
+                const response = await fetch(`/api/extraction/${requestId}/prompt`);
+                const result = await response.json();
+
+                if (response.ok) {
+                    resultJson.textContent = result.prompt || 'Nenhum prompt registrado para esta extração.';
+                } else {
+                    errorPanel.textContent = result.error || 'Erro ao carregar o prompt.';
+                    errorPanel.style.display = 'block';
+                    resultJson.textContent = '{}';
+                }
+            } catch (err) {
+                errorPanel.textContent = 'Erro ao buscar o prompt do servidor.';
                 errorPanel.style.display = 'block';
                 resultJson.textContent = '{}';
             }
@@ -499,6 +522,15 @@
                 loadJsonResult(requestId);
             });
         });
+
+        // Add click listener for Ver Prompt buttons
+        document.querySelectorAll('.btn-view-prompt').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const requestId = btn.getAttribute('data-request-id');
+                loadPrompt(requestId);
+            });
+        });
     </script>
 </body>
+
 </html>

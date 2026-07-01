@@ -34,6 +34,11 @@ public class FieldService {
         }
 
         Field field = fieldMapper.toEntity(request, template);
+        if (request.getParentFieldId() != null) {
+            Field parent = fieldRepository.findById(request.getParentFieldId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Parent field not found with id: " + request.getParentFieldId()));
+            field.setParentField(parent);
+        }
         Field savedField = fieldRepository.save(field);
         return fieldMapper.toResponse(savedField);
     }
@@ -62,6 +67,13 @@ public class FieldService {
         }
 
         fieldMapper.updateEntityFromRequest(request, field, template);
+        if (request.getParentFieldId() != null) {
+            Field parent = fieldRepository.findById(request.getParentFieldId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Parent field not found with id: " + request.getParentFieldId()));
+            field.setParentField(parent);
+        } else {
+            field.setParentField(null);
+        }
         Field updatedField = fieldRepository.save(field);
         return fieldMapper.toResponse(updatedField);
     }
